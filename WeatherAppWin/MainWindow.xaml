@@ -1,0 +1,317 @@
+﻿<Window x:Class="WeatherAppWin.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WeatherAppWin.CustomControls"
+        mc:Ignorable="d"
+        Title="AbaWeather" Height="710" Width="1290"
+        MinHeight="680"
+        MinWidth="540"
+        WindowStartupLocation="CenterScreen">
+
+    <!--Styles For Components-->
+    <Window.Resources>
+        <!--Style For ScrollBar-->
+        <Style x:Key="ScrollBarStyle" TargetType="ScrollBar">
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Grid>
+                            <Track x:Name="PART_Track" IsDirectionReversed="False">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Visibility="Collapsed"
+                                                  IsEnabled="False"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Height="10">
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="Thumb">
+                                                <Rectangle Fill="#485563" 
+                                                           Stroke="Transparent"
+                                                           RadiusX="5"
+                                                           RadiusY="5"/>
+                                            </ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Visibility="Collapsed"
+                                                  IsEnabled="False"/>
+                                </Track.IncreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!--Borders With Cities TextBlocks History Style-->
+        <Style x:Key="BordeWithCitiesBlocks" TargetType="Border">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Margin" Value="0, 0, 0, 10"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="#d8dde2" Opacity="0.1"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <SolidColorBrush Color="#d8dde2" Opacity="0.3"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <!--TextBlock With History of Cities Style-->
+        <Style x:Key="TextBoxCitiesHistoryStyle" TargetType="TextBlock">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="#bbc4cc"/>
+            <Setter Property="FontFamily" Value="Trebuchet MS"/>
+        </Style>
+        
+        <!--Style For Main Left StackPAnel With Cities History-->
+        <Style x:Key="StackPanelStyle" TargetType="StackPanel">
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="Margin" Value="0, 0, 10, 0"/>
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=leftSideMainGrid, Path=ActualWidth}" Value="220">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+            
+        <!--Left Field-->
+        <Grid Grid.Column="0" x:Name="leftSideMainGrid" Width="20">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="1,1"
+                                     EndPoint="1,0"
+                                     RenderOptions.BitmapScalingMode="HighQuality"
+                                     SpreadMethod="Reflect">
+                    <GradientStop Color="#171f2d" Offset="0.1"/>
+                    <GradientStop Color="#2c3c4d" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+
+            <StackPanel x:Name="StackPanelWithCities"
+                        Orientation="Vertical"
+                        Style="{StaticResource StackPanelStyle}">
+                <Border CornerRadius="5"
+                        VerticalAlignment="Top"
+                        Height="32" Width="200"
+                        Margin="0, 30, 0, 0">
+
+                    <Border.Background>
+                        <SolidColorBrush Color="#d8dde2" Opacity="0.4"/>
+                    </Border.Background>
+
+                    <TextBox x:Name="CityInputBox"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             VerticalAlignment="Center"
+                             Padding="5"
+                             MaxLength="100"
+                             FontSize="18" FontFamily="Trebuchet MS" Foreground="#1f2a36">
+                    </TextBox>
+                </Border>
+
+                <!--Delimiter Border-->
+                <Border Height="1" Width="200"
+                        Background="#94a2af"
+                        Margin="0, 10, 0, 10"/>
+
+                <Border Style="{StaticResource BordeWithCitiesBlocks}">
+                    <TextBlock Text="Город 1"
+                               Style="{StaticResource TextBoxCitiesHistoryStyle}">
+                    </TextBlock>
+                </Border>
+
+                <Border Style="{StaticResource BordeWithCitiesBlocks}">
+                    <TextBlock Text="Город 2"
+                               Style="{StaticResource TextBoxCitiesHistoryStyle}">
+                    </TextBlock>
+                </Border>
+
+                <Border Style="{StaticResource BordeWithCitiesBlocks}">
+                    <TextBlock Text="Город 3"
+                               Style="{StaticResource TextBoxCitiesHistoryStyle}">
+                    </TextBlock>
+                </Border>
+
+                <Border Style="{StaticResource BordeWithCitiesBlocks}">
+                    <TextBlock Text="Город 4"
+                               Style="{StaticResource TextBoxCitiesHistoryStyle}">
+                    </TextBlock>
+                </Border>
+            </StackPanel>
+
+            <!--LeftSide Open/Close Button-->
+            <Button x:Name="OpenLeftSideGrid" Click="OpenLeftSideGrid_Click"
+                    HorizontalAlignment="Right"
+                    Height="40"
+                    Width="20">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder"
+                                Background="Transparent"
+                                CornerRadius="5">
+                            <Path x:Name="PathOfButton"
+                                  HorizontalAlignment="Center"
+                                  Width="20" Height="20"
+                                  Data="M 5,0 L 15,10 L 5, 20" 
+                                  Stroke="#485563" 
+                                  StrokeThickness="3"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#2c3c4d"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#314357"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </Grid>
+        
+        <!--Right Field-->
+        <Grid Grid.Column="1">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="1,1" 
+                                     EndPoint="1,0"
+                                     RenderOptions.BitmapScalingMode="HighQuality"
+                                     SpreadMethod="Reflect">
+                    <GradientStop Color="#141E30" Offset="0.1"/>
+                    <GradientStop Color="#243B55" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="230"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!--Scroll For Top Days Templates and All Top Tiles-->
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" 
+                          VerticalScrollBarVisibility="Disabled"
+                          VerticalAlignment="Bottom"
+                          Margin="5, 0, 5, 0"
+                          Height="220">
+                <ScrollViewer.Resources>
+                    <Style TargetType="ScrollBar" BasedOn="{StaticResource ScrollBarStyle}"/>
+                </ScrollViewer.Resources>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0">
+                        <local:TopBordersDaysInfo HorizontalAlignment="Right"
+                                                  DateText="Сег. 19 февр"
+                                                  Margin="0, 0, 5, 0">
+                        </local:TopBordersDaysInfo>
+                    </Grid>
+
+                    <Grid Grid.Column="1">
+                        <local:TopBordersDaysInfo WeekDayText="Вт"
+                                                  DateText="20 февр"
+                                                  TempDayText="+8°"
+                                                  TempNightText="+4°"
+                                                  DescriptionText="Небольшой дождь">
+                        </local:TopBordersDaysInfo>
+                    </Grid>
+
+                    <Grid Grid.Column="2">
+                        <local:TopBordersDaysInfo WeekDayText="Ср"
+                                                  DateText="21 февр"
+                                                  TempDayText="+8°"
+                                                  TempNightText="+4°"
+                                                  DescriptionText="Дождь">
+                        </local:TopBordersDaysInfo>
+                    </Grid>
+
+                    <Grid Grid.Column="3">
+                        <local:TopBordersDaysInfo WeekDayText="Чт"
+                                                  DateText="22 февр"
+                                                  TempDayText="+8°"
+                                                  TempNightText="+4°"
+                                                  DescriptionText="Небольшой Дождь">
+                        </local:TopBordersDaysInfo>
+                    </Grid>
+
+                    <Grid Grid.Column="4">
+                        <local:TopBordersDaysInfo WeekDayText="Пт"
+                                                  DateText="23 февр"
+                                                  TempDayText="+10°"
+                                                  TempNightText="+7°"
+                                                  DescriptionText="Облачно с прояснениями">
+                        </local:TopBordersDaysInfo>
+                    </Grid>
+
+                    <Grid Grid.Column="5">
+                        <local:TopBordersDaysInfo WeekDayText="Сб"
+                                                  DateText="24 февр"
+                                                  TempDayText="+12°"
+                                                  TempNightText="+6°"
+                                                  DescriptionText="Облачно с прояснениями">
+                        </local:TopBordersDaysInfo>
+                    </Grid>
+
+                    <Grid Grid.Column="6">
+                        <local:TopBordersDaysInfo WeekDayText="Вс"
+                                                  DateText="25 февр"
+                                                  TempDayText="+10°"
+                                                  TempNightText="+7°"
+                                                  DescriptionText="Облачно с прояснениями"
+                                                  HorizontalAlignment="Left"
+                                                  Margin="5, 0, 0, 0">
+                        </local:TopBordersDaysInfo>
+                    </Grid>
+                </Grid>
+            </ScrollViewer>
+
+            <!--Bottom Right Field-->
+            <Grid Grid.Row="1">
+                <local:MainDeskInfo Margin="5, 3, 5, 0"
+                                    VerticalAlignment="Top"
+                                    TodayMainTemp="+5°"
+                                    TodayDescription="Облачно с прояснениями"
+                                    UnderTodayDescription="Ощущается как +3°"
+                                    WindInfo="3"
+                                    HumidityInfo="69"
+                                    PressureInfo="750"
+                                    UFindexInfo="низкий"
+                                    LenSunDayInfo="11 ч 1 мин"
+                                    SunRiseTime="07:28"
+                                    SunSetTime="18:29"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

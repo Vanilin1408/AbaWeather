@@ -1,0 +1,667 @@
+﻿<UserControl x:Class="WeatherAppWin.CustomControls.MainDeskInfo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WeatherAppWin.CustomControls"
+             mc:Ignorable="d">
+    
+    <UserControl.Resources>
+        <!--Style For Main Dash Border-->
+        <Style x:Key="MainBorderStyle" TargetType="Border">
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Background" Value="#243a53"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                To="#29425f" Duration="0:0:0.5"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                To="#243a53" Duration="0:0:0.5"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <!--Style For TextBlock With Statistics-->
+        <Style x:Key="StyleForStatisticsBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontFamily" Value="Trebuchet MS"/>
+            <Setter Property="Foreground" Value="#c5ccd4"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="10, 10, 0, 10"/>
+        </Style>
+        
+        <!--Style For <Run> in Statistic Text-->
+        <Style x:Key="StatisticsRunStyle" TargetType="Run">
+            <Setter Property="Foreground" Value="#ebeef0"/>
+        </Style>
+
+        <!--Style For Icons For Statistics-->
+        <Style x:Key="StatsIconStyle" TargetType="Image">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Width" Value="30"/>
+        </Style>
+
+        <!--Style For Icons For SunRise/Set-->
+        <Style x:Key="SunRiseSetIconStyle" TargetType="Image">
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="Width" Value="50"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0, 40, 0, 0"/>
+        </Style>
+        
+        <!--Style For SunRise/Set Time TextBlock-->
+        <Style x:Key="RiseSetTimeBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Foreground" Value="#d8dde2"/>
+            <Setter Property="FontFamily" Value="Trebuchet MS"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0, 130, 0, 0"/>
+        </Style>
+        
+        <!--Style For Delimiters Borders-->
+        <Style x:Key="DelimitersBorderStyle" TargetType="Border">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="1,1"
+                                         EndPoint="1,0">
+                        <GradientStop Color="#243a53" Offset="0"/>
+                        <GradientStop Color="#5e6d7f" Offset="0.1"/>
+                        <GradientStop Color="#5e6d7f" Offset="0.9"/>
+                        <GradientStop Color="#243a53" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!--Style For EveryHour Borders-->
+        <Style x:Key="EveryHourBorderStyle" TargetType="Border">
+            <Setter Property="Height" Value="150"/>
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Margin" Value="5, 0, 5, 0"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="#bbb1bac5" Opacity="0.15"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                To="#2fb1bac5" Duration="0:0:0.3"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                To="#bbb1bac5" Duration="0:0:0.3"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <!--Style For EveryHour Time TextBlocks-->
+        <Style x:Key="EveryHourTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Foreground" Value="#d8dde2"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="FontFamily" Value="Trebuchet MS"/>
+            <Setter Property="Margin" Value="0, 20, 0, 0"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+
+        <!--Style For EveryHour Temp TextBlocks-->
+        <Style x:Key="EveryHourTempBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="Foreground" Value="#d8dde2"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="FontFamily" Value="Trebuchet MS"/>
+            <Setter Property="Margin" Value="0, 0, 0, 20"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+
+        <!--Style For EveryHour Icon With Info of Weather-->
+        <Style x:Key="EveryHourImageWeatherStyle" TargetType="Image">
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="Width" Value="50"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0, 0, 0, 0"/>
+        </Style>
+
+        <!--ScrollViewer For EveryHour Panels-->
+        <Style x:Key="ScrollViewerStyle" TargetType="ScrollViewer">
+            <Setter Property="HorizontalScrollBarVisibility" Value="Hidden"/>
+            <Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="HorizontalScrollBarVisibility" Value="Visible"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <!--ScrollBar For EveryHour Panels-->
+        <Style x:Key="ScrollBarMainDeskStyle" TargetType="ScrollBar">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="25, 0, 25, 0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Grid>
+                            <Track x:Name="PART_Track" IsDirectionReversed="False">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Visibility="Collapsed"
+                                                  IsEnabled="False"/>
+                                </Track.DecreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Height="10">
+                                        <Thumb.Template>
+                                            <ControlTemplate TargetType="Thumb">
+                                                <Rectangle Fill="#485563" 
+                                                           Stroke="Transparent"
+                                                           RadiusX="5"
+                                                           RadiusY="5"/>
+                                            </ControlTemplate>
+                                        </Thumb.Template>
+                                    </Thumb>
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Visibility="Collapsed"
+                                                  IsEnabled="False"/>
+                                </Track.IncreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    
+    <!--Main Dash Border-->
+    <Border Width="1040"
+            Height="400"
+            Style="{StaticResource MainBorderStyle}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="200"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="178"/>
+                    <ColumnDefinition Width="1"/>
+                    <ColumnDefinition Width="280"/>
+                    <ColumnDefinition Width="1"/>
+                    <ColumnDefinition Width="280"/>
+                </Grid.ColumnDefinitions>
+
+                <!--Cell With Today/Main Temp-->
+                <Grid Grid.Column="0">
+                    <TextBlock x:Name="TodayMainTempBlock"
+                                Text="{Binding TodayMainTemp, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                FontSize="80"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Margin="0, 0, 0, 0"
+                                Foreground="#d8dde2"
+                                FontFamily="Trebuchet MS">
+                    </TextBlock>
+                    <Image Source="/WeatherIcons/partlycloudyday100.png"
+                            HorizontalAlignment="Left"
+                            Stretch="Uniform"
+                            Width="100"
+                            Height="100"
+                            Margin="30, 0, 0, 10"/>
+                </Grid>
+
+                <!--Cell With Weather Text-->
+                <Grid Grid.Column="1">
+                    <StackPanel Orientation="Vertical"
+                                VerticalAlignment="Center">
+                        <TextBlock x:Name="TodayDescriptionBlock"
+                                    Text="{Binding TodayDescription, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    HorizontalAlignment="Left"
+                                    FontSize="20"
+                                    Foreground="#d8dde2"
+                                    FontFamily="Trebuchet MS"
+                                    TextWrapping="Wrap"
+                                    Margin="10, 0, 0, 5">
+
+                        </TextBlock>
+                        <TextBlock x:Name="UnderTodayDescriptionBlock"
+                                    Text="{Binding UnderTodayDescription, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    FontSize="16"
+                                    Foreground="#9daab6"
+                                    FontFamily="Trebuchet MS"
+                                    TextWrapping="Wrap"
+                                    Margin="10, 0, 0, 0">
+                        </TextBlock>
+                    </StackPanel>
+                </Grid>
+
+                <!--Border - delimiter-->
+                <Grid Grid.Column="2">
+                    <Border Height="160"
+                            Style="{StaticResource DelimitersBorderStyle}">
+                    </Border>
+                </Grid>
+
+                <!--Cell With Statistics Info-->
+                <Grid Grid.Column="3">
+                    <StackPanel Orientation="Vertical"
+                            VerticalAlignment="Center"
+                            Margin="10, 0, 0, 0">
+                        <!--1-st Stat-->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Image Source="/WeatherIcons/StatisticsIcons/windspeed-96.png"
+                                    Style="{StaticResource StatsIconStyle}">
+                                </Image>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <TextBlock x:Name="WindInfoBlock"
+                                        Style="{StaticResource StyleForStatisticsBlockStyle}">
+                                Ветер: <Run Text="{Binding WindInfo, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                            Style="{StaticResource StatisticsRunStyle}"/> м/с, СВ
+                                </TextBlock>
+                            </Grid>
+                        </Grid>
+                        <!--2-st Stat-->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Image Source="/WeatherIcons/StatisticsIcons/hygrometer-100.png"
+                                    Style="{StaticResource StatsIconStyle}">
+                                </Image>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <TextBlock x:Name="HumidityInfoBlock"
+                                        Style="{StaticResource StyleForStatisticsBlockStyle}">
+                                Влажность: <Run Text="{Binding HumidityInfo, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                Style="{StaticResource StatisticsRunStyle}"/> %
+                                </TextBlock>
+                            </Grid>
+                        </Grid>
+                        <!--3-st Stat-->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Image Source="/WeatherIcons/StatisticsIcons/atmospheric-pressure-100.png"
+                                       Style="{StaticResource StatsIconStyle}">
+                                </Image>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <TextBlock x:Name="PressureInfoBlock"
+                                           Style="{StaticResource StyleForStatisticsBlockStyle}">
+                                Давление: <Run Text="{Binding PressureInfo, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                               Style="{StaticResource StatisticsRunStyle}"/> мм рт. ст.
+                                </TextBlock>
+                            </Grid>
+                        </Grid>
+                        <!--4-st Stat-->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Image Source="/WeatherIcons/StatisticsIcons/uv-index-100.png"
+                                    Style="{StaticResource StatsIconStyle}">
+                                </Image>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <TextBlock x:Name="UFindexInfoBlock"
+                                            Style="{StaticResource StyleForStatisticsBlockStyle}">
+                                УФ-индекс: <Run Text="{Binding UFindexInfo, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                                Style="{StaticResource StatisticsRunStyle}"/>
+                                </TextBlock>
+                            </Grid>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+
+                <!--Border - delimiter-->
+                <Grid Grid.Column="4">
+                    <Border Height="160"
+                            Style="{StaticResource DelimitersBorderStyle}">
+                    </Border>
+                </Grid>
+
+                <!--Cell With SunRise/Set Info-->
+                <Grid Grid.Column="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--Len of Light Day-->
+                    <TextBlock Grid.Column="0" Grid.ColumnSpan="2"
+                                Style="{StaticResource StyleForStatisticsBlockStyle}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                Margin="0, 28, 0, 0"
+                                TextAlignment="Center">
+                        Длительность светового дня
+                        <LineBreak/>
+                        <Run Text="{Binding LenSunDayInfo, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                Foreground="#d8dde2" FontSize="20"/>
+                    </TextBlock>
+
+                    <Grid Grid.Column="0">
+                        <Image Source="/WeatherIcons/StatisticsIcons/sunrise-96.png"
+                                Style="{StaticResource SunRiseSetIconStyle}">
+                        </Image>
+
+                        <TextBlock Text="{Binding SunRiseTime, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    Style="{StaticResource RiseSetTimeBlockStyle}">
+                        </TextBlock>
+                    </Grid>
+
+                    <Grid Grid.Column="1">
+                        <Image Source="/WeatherIcons/StatisticsIcons/sunset-96.png"
+                                Style="{StaticResource SunRiseSetIconStyle}">
+                        </Image>
+                        <TextBlock Text="{Binding SunSetTime, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    Style="{StaticResource RiseSetTimeBlockStyle}">
+                        </TextBlock>
+                    </Grid>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!--Border - delimiter-->
+                <Grid Grid.Row="0">
+                    <Border Width="1000"
+                            HorizontalAlignment="Center">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0"
+                                                 EndPoint="1,1">
+                                <GradientStop Color="#243a53" Offset="0"/>
+                                <GradientStop Color="#5e6d7f" Offset="0.05"/>
+                                <GradientStop Color="#5e6d7f" Offset="0.95"/>
+                                <GradientStop Color="#243a53" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Row="1">
+                    <ScrollViewer Style="{StaticResource ScrollViewerStyle}">
+                        <ScrollViewer.Resources>
+                            <Style TargetType="ScrollBar" BasedOn="{StaticResource ScrollBarMainDeskStyle}"/>
+                        </ScrollViewer.Resources>
+
+                        <StackPanel CanHorizontallyScroll="True"
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Margin="20, 25, 20, 0">
+                            <!--1 Hour-->
+                            <Border Style="{StaticResource EveryHourBorderStyle}">
+                                <Grid>
+                                    <Image x:Name="Hour1PlateImage"
+                                           Source="/WeatherIcons/partlycloudyday100.png"
+                                           Style="{StaticResource EveryHourImageWeatherStyle}">
+                                    </Image>
+
+                                    <TextBlock x:Name="Hour1PlateTime" Text="6:00"
+                                               Style="{StaticResource EveryHourTextBlockStyle}">
+                                    </TextBlock>
+
+                                    <TextBlock x:Name="Hour1PlateTemp" Text="+5°"
+                                               Style="{StaticResource EveryHourTempBlockStyle}">
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+                            <!--2 Hour-->
+                            <Border Style="{StaticResource EveryHourBorderStyle}">
+                                <Grid>
+                                    <Image x:Name="Hour2PlateImage"
+                                           Source="/WeatherIcons/cloudly100.png"
+                                           Style="{StaticResource EveryHourImageWeatherStyle}">
+                                    </Image>
+
+                                    <TextBlock x:Name="Hour2PlateTime" Text="7:00"
+                                               Style="{StaticResource EveryHourTextBlockStyle}">
+                                    </TextBlock>
+
+                                    <TextBlock x:Name="Hour2PlateTemp" Text="+5°"
+                                               Style="{StaticResource EveryHourTempBlockStyle}">
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+                            <!--3 Hour-->
+                            <Border Style="{StaticResource EveryHourBorderStyle}">
+                                <Grid>
+                                    <Image x:Name="Hour3PlateImage"
+                                           Source="/WeatherIcons/partlycloudyday100.png"
+                                           Style="{StaticResource EveryHourImageWeatherStyle}">
+                                    </Image>
+
+                                    <TextBlock x:Name="Hour3PlateTime" Text="8:00"
+                                               Style="{StaticResource EveryHourTextBlockStyle}">
+                                    </TextBlock>
+
+                                    <TextBlock x:Name="Hour3PlateTemp" Text="+6°"
+                                               Style="{StaticResource EveryHourTempBlockStyle}">
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+                            <!--4 Hour-->
+                            <Border Style="{StaticResource EveryHourBorderStyle}">
+                                <Grid>
+                                    <Image x:Name="Hour4PlateImage"
+                                           Source="/WeatherIcons/partlycloudyday100.png"
+                                           Style="{StaticResource EveryHourImageWeatherStyle}">
+                                    </Image>
+
+                                    <TextBlock x:Name="Hour4PlateTime" Text="9:00"
+                                               Style="{StaticResource EveryHourTextBlockStyle}">
+                                    </TextBlock>
+
+                                    <TextBlock x:Name="Hour4PlateTemp" Text="+7°"
+                                               Style="{StaticResource EveryHourTempBlockStyle}">
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+                            <!--5 Hour-->
+                            <Border Style="{StaticResource EveryHourBorderStyle}">
+                                <Grid>
+                                    <Image x:Name="Hour5PlateImage"
+                                           Source="/WeatherIcons/partlycloudyday100.png"
+                                           Style="{StaticResource EveryHourImageWeatherStyle}">
+                                    </Image>
+
+                                    <TextBlock x:Name="Hour5PlateTime" Text="10:00"
+                                               Style="{StaticResource EveryHourTextBlockStyle}">
+                                    </TextBlock>
+
+                                    <TextBlock x:Name="Hour5PlateTemp" Text="+7°"
+                                               Style="{StaticResource EveryHourTempBlockStyle}">
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+                            <!--6 Hour-->
+                            <Border Style="{StaticResource EveryHourBorderStyle}">
+                                <Grid>
+                                    <Image x:Name="Hour6PlateImage"
+                                           Source="/WeatherIcons/cloudly100.png"
+                                           Style="{StaticResource EveryHourImageWeatherStyle}">
+                                    </Image>
+
+                                    <TextBlock x:Name="Hour6PlateTime" Text="11:00"
+                                               Style="{StaticResource EveryHourTextBlockStyle}">
+                                    </TextBlock>
+
+                                    <TextBlock x:Name="Hour6PlateTemp" Text="+7°"
+                                               Style="{StaticResource EveryHourTempBlockStyle}">
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+                            <!--7 Hour-->
+                            <Border Style="{StaticResource EveryHourBorderStyle}">
+                                <Grid>
+                                    <Image x:Name="Hour7PlateImage"
+                                           Source="/WeatherIcons/lightrain100.png"
+                                           Style="{StaticResource EveryHourImageWeatherStyle}">
+                                    </Image>
+
+                                    <TextBlock x:Name="Hour7PlateTime" Text="12:00"
+                                               Style="{StaticResource EveryHourTextBlockStyle}">
+                                    </TextBlock>
+
+                                    <TextBlock x:Name="Hour7PlateTemp" Text="+10°"
+                                               Style="{StaticResource EveryHourTempBlockStyle}">
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+                            <!--8 Hour-->
+                            <Border Style="{StaticResource EveryHourBorderStyle}">
+                                <Grid>
+                                    <Image x:Name="Hour8PlateImage"
+                                           Source="/WeatherIcons/lightrain100.png"
+                                           Style="{StaticResource EveryHourImageWeatherStyle}">
+                                    </Image>
+
+                                    <TextBlock x:Name="Hour8PlateTime" Text="13:00"
+                                               Style="{StaticResource EveryHourTextBlockStyle}">
+                                    </TextBlock>
+
+                                    <TextBlock x:Name="Hour8PlateTemp" Text="+9°"
+                                               Style="{StaticResource EveryHourTempBlockStyle}">
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+                            <!--9 Hour-->
+                            <Border Style="{StaticResource EveryHourBorderStyle}">
+                                <Grid>
+                                    <Image x:Name="Hour9PlateImage"
+                                           Source="/WeatherIcons/partlycloudyday100.png"
+                                           Style="{StaticResource EveryHourImageWeatherStyle}">
+                                    </Image>
+
+                                    <TextBlock x:Name="Hour9PlateTime" Text="14:00"
+                                               Style="{StaticResource EveryHourTextBlockStyle}">
+                                    </TextBlock>
+
+                                    <TextBlock x:Name="Hour9PlateTemp" Text="+9°"
+                                               Style="{StaticResource EveryHourTempBlockStyle}">
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+                            <!--10 Hour-->
+                            <Border Style="{StaticResource EveryHourBorderStyle}">
+                                <Grid>
+                                    <Image x:Name="Hour10PlateImage"
+                                           Source="/WeatherIcons/partlycloudyday100.png"
+                                           Style="{StaticResource EveryHourImageWeatherStyle}">
+                                    </Image>
+
+                                    <TextBlock x:Name="Hour10PlateTime" Text="15:00"
+                                               Style="{StaticResource EveryHourTextBlockStyle}">
+                                    </TextBlock>
+
+                                    <TextBlock x:Name="Hour10PlateTemp" Text="+9°"
+                                               Style="{StaticResource EveryHourTempBlockStyle}">
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+                            <!--11 Hour-->
+                            <Border Style="{StaticResource EveryHourBorderStyle}">
+                                <Grid>
+                                    <Image x:Name="Hour11PlateImage"
+                                           Source="/WeatherIcons/partlycloudyday100.png"
+                                           Style="{StaticResource EveryHourImageWeatherStyle}">
+                                    </Image>
+
+                                    <TextBlock x:Name="Hour11PlateTime" Text="16:00"
+                                               Style="{StaticResource EveryHourTextBlockStyle}">
+                                    </TextBlock>
+
+                                    <TextBlock x:Name="Hour11PlateTemp" Text="+8°"
+                                               Style="{StaticResource EveryHourTempBlockStyle}">
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+                            <!--12 Hour-->
+                            <Border Style="{StaticResource EveryHourBorderStyle}">
+                                <Grid>
+                                    <Image x:Name="Hour12PlateImage"
+                                           Source="/WeatherIcons/partlycloudyday100.png"
+                                           Style="{StaticResource EveryHourImageWeatherStyle}">
+                                    </Image>
+
+                                    <TextBlock x:Name="Hour12PlateTime" Text="17:00"
+                                               Style="{StaticResource EveryHourTextBlockStyle}">
+                                    </TextBlock>
+
+                                    <TextBlock x:Name="Hour12PlateTemp" Text="+6°"
+                                               Style="{StaticResource EveryHourTempBlockStyle}">
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+                            <!--13 Hour-->
+                            <Border Style="{StaticResource EveryHourBorderStyle}">
+                                <Grid>
+                                    <Image x:Name="Hour13PlateImage"
+                                           Source="/WeatherIcons/cloudly100.png"
+                                           Style="{StaticResource EveryHourImageWeatherStyle}">
+                                    </Image>
+
+                                    <TextBlock x:Name="Hour13PlateTime" Text="18:00"
+                                               Style="{StaticResource EveryHourTextBlockStyle}">
+                                    </TextBlock>
+
+                                    <TextBlock x:Name="Hour13PlateTemp" Text="+5°"
+                                               Style="{StaticResource EveryHourTempBlockStyle}">
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>
