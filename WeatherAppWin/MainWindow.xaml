@@ -184,10 +184,10 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="ButtonBorder" Property="Background" Value="#2c3c4d"/>
+                                <Setter TargetName="PathOfButton" Property="Stroke" Value="#5d6e80"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="ButtonBorder" Property="Background" Value="#314357"/>
+                                <Setter TargetName="PathOfButton" Property="Stroke" Value="#75879b"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
