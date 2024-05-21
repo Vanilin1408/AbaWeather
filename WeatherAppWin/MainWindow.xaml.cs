@@ -44,7 +44,6 @@ namespace WeatherAppWin
             {
                 widthAnimation.From = 20;
                 widthAnimation.To = 220;
-
                 leftSideMainGrid.BeginAnimation(Grid.WidthProperty, widthAnimation);
 
                 if (path != null)
